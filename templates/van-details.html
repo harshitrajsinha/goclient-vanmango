@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VanManGo</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" />
+  <link rel="stylesheet" href="../static/css/van-details.css" />
+</head>
+
+<body>
+  <div class="main-container">
+    <header>
+      <a class="logo-link" href="/">
+        <div class="van-life logo">VANMANGO</div>
+      </a>
+      <nav>
+        <div class="nav__about-tag">About</div>
+        <div class="nav__vans-tag">Vans</div>
+      </nav>
+    </header>
+    <div class="back-arrow">
+      <span>&#8592;</span><a href="/">Back to all vans</a>
+    </div>
+
+    <section class="van-details">
+      <img class="van-details__van-image" src="{{.ImageURL}}" alt="{{.Name}}" />
+      <div class="van-details__van-type {{.Category}}">{{.Category}}</div>
+      <div class="van-details__van-name">{{.Name}}</div>
+      <div class="van-details__van-price">
+        &#x20B9;{{.Price}}<span class="day">/day</span>
+      </div>
+      <div class="van-details__van-desc">{{.Description}}</div>
+      <div class="van-details__van-operation">
+        <a href="/van-details/update-van?van={{.VanCode}}">
+          <button type="submit">Update Van</button>
+        </a>
+        <a href="/van-details/delete-van?van={{.VanCode}}">
+          <button type="submit">Delete Van</button>
+        </a>
+      </div>
+    </section>
+    <footer>
+      <div class="footer-txt">Ⓒ 2025 #VANMANGO</div>
+    </footer>
+  </div>
+</body>
+
+</html>
