@@ -1,0 +1,238 @@
+:root {
+  --default-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Ubuntu, "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei",
+    "Source Han Sans CN", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+}
+
+body {
+  background-color: #fff7ed;
+  height: auto;
+  width: 80%;
+  margin: 0 auto;
+  padding-top: 2rem;
+}
+
+.main-container {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo {
+  color: #000000;
+  font-family: Inter, var(--default-font-family);
+  font-size: 2rem;
+  font-weight: 900;
+  line-height: 40.271px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+nav {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  color: #4d4d4d;
+  font-size: 1.3rem;
+  font-family: Inter, var(--default-font-family);
+  font-weight: 600;
+  line-height: 22.923px;
+  white-space: nowrap;
+}
+.nav__about-tag:hover,
+.nav__vans-tag:hover {
+  color: black;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+section {
+  flex-grow: 1;
+  margin-top: 3rem;
+  width: 100%;
+  padding-bottom: 1rem;
+}
+
+.vans-list__heading {
+  color: #161616;
+  font-family: Inter, var(--default-font-family);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 33.652px;
+  text-align: left;
+  white-space: nowrap;
+}
+.vans-list__filters {
+  display: flex;
+  width: 100%;
+  height: 37px;
+  margin-top: 2rem;
+  gap: 2rem;
+  border-radius: 5px;
+  align-items: center;
+}
+
+.filters-option {
+  cursor: pointer;
+  color: #4d4d4d;
+  font-family: Inter, var(--default-font-family);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 23.919px;
+  text-align: center;
+  background: #ffead0;
+  border: none;
+  outline: none;
+  padding: 0.5rem 2rem;
+  border-radius: 0.5rem;
+}
+
+.clear-filters {
+  background-color: transparent;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 23.919px;
+  color: #4d4d4d;
+  font-family: Inter, var(--default-font-family);
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.vans-list__container {
+  margin-top: 4rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4rem;
+}
+
+.van-list__item {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 20rem;
+  max-width: 20rem;
+}
+
+.item-image {
+  position: relative;
+  height: 18rem;
+  min-height: 18rem;
+  max-height: 18rem;
+  min-width: 20rem;
+  width: 20rem;
+  max-width: 20rem;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.item-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.item-name {
+  color: #161616;
+  font-family: Avenir Next, var(--default-font-family);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 31.662px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.item-price {
+  color: black;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.day {
+  color: #161616;
+  font-family: Avenir Next, var(--default-font-family);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 13.953px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.van-type {
+  color: #ffead0;
+  border-radius: 5px;
+  font-family: Inter, var(--default-font-family);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 28.903px;
+  text-align: center;
+  width: fit-content;
+  padding: 0.3rem 1.5rem;
+}
+
+.van-type.simple {
+  background-color: #e17553;
+}
+
+.van-type.rugged {
+  background-color: #115e59;
+}
+
+.van-type.luxury {
+  background-color: #161616;
+}
+
+.add-vans-link {
+  display: block;
+  width: 100%;
+}
+
+.add-vans {
+  display: block;
+  width: 60%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 5rem auto 1rem;
+  padding: 1rem 2rem;
+  background: #ff8b38;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+footer {
+  width: 100%;
+  background: #252525;
+}
+.footer-txt {
+  padding: 0 1rem;
+  color: #aaaaaa;
+  font-family: Inter, var(--default-font-family);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 22.923px;
+  text-align: center;
+}
+
+/* https://static.codia.ai/custom_image/2025-03-29/060113/modest-explorer-van.png
+  https://static.codia.ai/custom_image/2025-03-29/060113/beach-bum-van.png
+  https://static.codia.ai/custom_image/2025-03-29/060113/reliable-red-van.png
+  https://static.codia.ai/custom_image/2025-03-29/060113/dreamfinder-van.png */

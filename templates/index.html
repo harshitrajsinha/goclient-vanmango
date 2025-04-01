@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VanManGo</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" />
+  <link rel="stylesheet" href="../static/css/vans.css" />
+</head>
+
+<body>
+  <div class="main-container">
+    <header>
+      <a class="logo-link" href="/">
+        <div class="van-life logo">VANMANGO</div>
+      </a>
+      <nav>
+        <div class="nav__about-tag">About</div>
+        <div class="nav__vans-tag">Vans</div>
+      </nav>
+    </header>
+    <section class="vans-list">
+      <div class="explore-our-van-options vans-list__heading">
+        Explore our van options
+      </div>
+      <div class="vans-list__filters">
+        <a class="filters-option">Simple</a>
+        <a class="filters-option">Luxury</a>
+        <a class="filters-option">Rugged</a>
+        <a class="clear-filters">Clear filters</a>
+      </div>
+      <div class="vans-list__container">
+        {{if .VanDetails}} {{range .VanDetails}}
+        <a href="/van-details?van={{.VanCode}}">
+          <div class="van-list__item">
+            <img src="{{.ImageURL}}" class="item-image" />
+            <div class="item-info">
+              <div class="item-name">{{.Name}}</div>
+              <div class="item-price">
+                &#x20B9;{{.Price}} <span class="day">/day</span>
+              </div>
+            </div>
+            <div class="van-type {{.Category}}">{{.Category}}</div>
+          </div>
+        </a>
+        {{end}} {{end}}
+      </div>
+      <form action="/create-van" class="add-vans-link" method="post">
+        <button class="add-vans">Add Vans</button>
+      </form>
+    </section>
+    <footer>
+      <div class="footer-txt">Ⓒ 2025 #VANMANGO</div>
+    </footer>
+  </div>
+</body>
+
+</html>

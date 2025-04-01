@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VanManGo</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&display=swap" />
+  <link rel="stylesheet" href="../static/css/create-van.css" />
+</head>
+
+<body>
+  <div class="main-container">
+    <header>
+      <a class="logo-link" href="/">
+        <div class="van-life logo">VANMANGO</div>
+      </a>
+      <nav>
+        <div class="nav__about-tag">About</div>
+        <div class="nav__vans-tag">Vans</div>
+      </nav>
+    </header>
+    <section>
+      <div class="create-van-heading">Create New Van</div>
+      <form action="/create-new-van" class="create-van-form" method="post">
+        <div class="form-container">
+          <div class="form-field-container">
+            <label>Van Name<br />
+              <input required type="text" name="name" placeholder="New Van" value="" minlength="3" maxlength="20" />
+            </label>
+            <label>Van Brand<br />
+              <input required type="text" name="brand" placeholder="Mercedes" value="" minlength="3" maxlength="20" />
+            </label>
+          </div>
+          <div class="form-field-container">
+            <label>Van Description
+              <textarea required type="text" name="description" placeholder="Tell more about the van" value="" rows="3"
+                cols="50" maxlength="300"></textarea>
+            </label>
+          </div>
+
+          <p>Van Category</p>
+          <div class="form-field-container">
+            <label>Simple<input type="radio" name="category" value="simple" checked required /></label>
+            <label>Rugged<input type="radio" name="category" value="rugged" /></label>
+            <label>Luxury<input type="radio" name="category" value="luxury" /></label>
+          </div>
+          <p>Fuel Type</p>
+          <div class="form-field-container">
+            <label>Gasoline<input type="radio" name="fuel-type" value="gasoline" checked required /></label>
+            <label>Petrol<input type="radio" name="fuel-type" value="petrol" /></label>
+            <label>Diesel<input type="radio" name="fuel-type" value="diesel" /></label>
+          </div>
+          <div class="form-field-container">
+            <label>Van Price
+              <input required type="number" placeholder="2000" name="price" min="1000" max="9999" value="" />
+            </label>
+            <label>Van Image
+              <input required type="text" name="image-url" minlength="15" maxlength="150"
+                placeholder="https://hosted-image-url.png" value="" />
+            </label>
+          </div>
+        </div>
+        <!-- <a href="http://localhost:8081/create-van?name=John&age=30">Engine</a> -->
+        <button class="create-van-btn" type="submit">Create</button>
+      </form>
+    </section>
+    <footer>
+      <div class="footer-txt">Ⓒ 2025 #VANMANGO</div>
+    </footer>
+  </div>
+</body>
+
+</html>
