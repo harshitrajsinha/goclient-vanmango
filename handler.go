@@ -1,13 +1,16 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/goclient-vanmango/apiclient"
 	"github.com/goclient-vanmango/routes"
 	"github.com/goclient-vanmango/service"
+	"github.com/joho/godotenv"
 )
 
 type FormData struct {
@@ -41,6 +44,18 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	http.Handle("/assets/", http.StripPrefix("/assets/", fsAssets))
 
 	// Handle routes
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Header().Add("Accept-Content", "application/json")
+		json.NewEncoder(w).Encode(struct {
+			Code    int
+			Message string
+		}{
+			Code:    http.StatusOK,
+			Message: "Client server is functioning",
+		})
+		log.Println("Client server is functioning")
+	})
 	http.HandleFunc("/", apiHandler.PageHomeHandler)
 	http.HandleFunc("/sign-in", apiHandler.PageSignInHandler)
 	http.HandleFunc("/logout", apiHandler.LogoutHandler)
@@ -52,9 +67,13 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	http.HandleFunc("/update-van/{vanID}", apiHandler.UpdateVanHandler)
 	http.HandleFunc("/van-details/delete-van", apiHandler.DeleteVanHandler)
 
+	_ = godotenv.Load()
+
+	port := os.Getenv("PORT")
+
 	// Start server
-	fmt.Println("Client server is listening on PORT 8081")
-	log.Fatal(http.ListenAndServe(":8081", nil))
+	fmt.Println("Client server is listening on PORT ", port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 
 }
 
@@ -62,7 +81,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 // 	apiclient := apiclient.NewAPIClient()
 // 	apiService := service.NewAPIService(apiclient)
-// 	apiHandler := handler.NewAPIHandler(apiService)
+// 	apiHandler := routes.NewAPIHandler(apiService)
 
 // 	// Serve static files
 // 	fs := http.FileServer(http.Dir("./static"))
@@ -73,6 +92,18 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 // 	http.Handle("/assets/", http.StripPrefix("/assets/", fsAssets))
 
 // 	// Handle routes
+// 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+// 		w.WriteHeader(http.StatusOK)
+// 		w.Header().Add("Accept-Content", "application/json")
+// 		json.NewEncoder(w).Encode(struct {
+// 			Code    int
+// 			Message string
+// 		}{
+// 			Code:    http.StatusOK,
+// 			Message: "Client server is functioning",
+// 		})
+// 		log.Println("Client server is functioning")
+// 	})
 // 	http.HandleFunc("/", apiHandler.PageHomeHandler)
 // 	http.HandleFunc("/sign-in", apiHandler.PageSignInHandler)
 // 	http.HandleFunc("/logout", apiHandler.LogoutHandler)
@@ -84,7 +115,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 // 	http.HandleFunc("/update-van/{vanID}", apiHandler.UpdateVanHandler)
 // 	http.HandleFunc("/van-details/delete-van", apiHandler.DeleteVanHandler)
 
+// 	_ = godotenv.Load()
+
+// 	port := os.Getenv("PORT")
+
 // 	// Start server
-// 	fmt.Println("Client server is listening on PORT 8081")
-// 	log.Fatal(http.ListenAndServe(":8081", nil))
+// 	fmt.Println("Client server is listening on PORT ", port)
+// 	log.Fatal(http.ListenAndServe(":"+port, nil))
 // }
