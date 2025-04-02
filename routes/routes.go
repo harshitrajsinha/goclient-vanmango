@@ -20,7 +20,7 @@ type apiHandler struct {
 }
 
 func NewAPIHandler(service *service.Service) *apiHandler {
-	tmpl := template.Must(template.ParseGlob("/templates/*.html"))
+	tmpl := template.Must(template.ParseGlob("templates/*.html"))
 	return &apiHandler{
 		apiService: service,
 		tmpl:       tmpl,
