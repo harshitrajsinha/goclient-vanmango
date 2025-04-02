@@ -37,8 +37,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	apiHandler := routes.NewAPIHandler(apiService)
 
 	router := mux.NewRouter()
-	router.Handle("static/", http.StripPrefix("static/", http.FileServer(http.Dir("static"))))
-	router.Handle("assets/", http.StripPrefix("assets/", http.FileServer(http.Dir("assets"))))
+	// Serve static files under /static
+	router.Handle("/static/{file:.*}", http.StripPrefix("/static/", http.FileServer(http.Dir("static/"))))
+
+	// Serve assets files under /assets
+	router.Handle("/assets/{file:.*}", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets/"))))
 
 	// Serve static files
 	// fs := http.FileServer(http.Dir("./static"))
