@@ -70,7 +70,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	router.HandleFunc("/logout", apiHandler.LogoutHandler).Methods(http.MethodGet)
 	router.HandleFunc("/authorize", apiHandler.AuthorizeUserHandler).Methods(http.MethodPost)
 	router.HandleFunc("/van-details", apiHandler.PageVanDetailsHandler).Methods(http.MethodGet)
-	router.HandleFunc("/create-van", apiHandler.PageCreateVanHandler).Methods(http.MethodGet)
+	router.HandleFunc("/create-van", apiHandler.PageCreateVanHandler).Methods(http.MethodPost)
 	router.HandleFunc("/create-new-van", apiHandler.CreateNewVanHandler).Methods(http.MethodPost)
 	router.HandleFunc("/van-details/update-van", apiHandler.PageUpdateVanHandler).Methods(http.MethodGet)
 	router.HandleFunc("/update-van/{vanID}", apiHandler.UpdateVanHandler).Methods(http.MethodPost)
