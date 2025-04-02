@@ -16,11 +16,14 @@ import (
 
 type apiHandler struct {
 	apiService *service.Service
+	tmpl       *template.Template
 }
 
 func NewAPIHandler(service *service.Service) *apiHandler {
+	tmpl := template.Must(template.ParseGlob("templates/*.html"))
 	return &apiHandler{
 		apiService: service,
+		tmpl:       tmpl,
 	}
 }
 
@@ -169,9 +172,14 @@ func (h *apiHandler) PageHomeHandler(w http.ResponseWriter, r *http.Request) {
 
 	var UserLoggedIn bool
 
+	if h.tmpl == nil {
+		http.Error(w, "Template not initialized", http.StatusInternalServerError)
+		return
+	}
+
 	if r.URL.Path != "/" && r.URL.Path != "/favicon.ico" {
-		tmpl, _ := template.ParseFiles("templates/page-not-found.html")
-		_ = tmpl.Execute(w, nil)
+		h.tmpl, _ = template.ParseFiles("templates/page-not-found.html")
+		_ = h.tmpl.Execute(w, nil)
 		log.Println("PageHomeHandler::Incorrect error path ", r.URL.Path)
 		return
 	}
@@ -186,8 +194,8 @@ func (h *apiHandler) PageHomeHandler(w http.ResponseWriter, r *http.Request) {
 
 	allVanData, err := h.apiService.GetAllVans(w, r)
 	if err != nil {
-		tmpl, _ := template.ParseFiles("templates/service-unavailable.html")
-		_ = tmpl.Execute(w, nil)
+		h.tmpl, _ = template.ParseFiles("templates/service-unavailable.html")
+		_ = h.tmpl.Execute(w, nil)
 		panic(err)
 	}
 
@@ -205,16 +213,16 @@ func (h *apiHandler) PageHomeHandler(w http.ResponseWriter, r *http.Request) {
 		VanDetails: *allVanData,
 	}
 
-	tmpl, err := template.ParseFiles("templates/index.html")
+	h.tmpl, err = template.ParseFiles("templates/index.html")
 	if err != nil {
-		tmpl, _ := template.ParseFiles("templates/service-unavailable.html")
-		_ = tmpl.Execute(w, nil)
+		h.tmpl, _ = template.ParseFiles("templates/service-unavailable.html")
+		_ = h.tmpl.Execute(w, nil)
 		panic(err)
 	}
-	err = tmpl.Execute(w, dataToRender)
+	err = h.tmpl.Execute(w, dataToRender)
 	if err != nil {
-		tmpl, _ := template.ParseFiles("templates/service-unavailable.html")
-		_ = tmpl.Execute(w, nil)
+		h.tmpl, _ = template.ParseFiles("templates/service-unavailable.html")
+		_ = h.tmpl.Execute(w, nil)
 		panic(err)
 	}
 }
