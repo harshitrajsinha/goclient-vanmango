@@ -10,6 +10,7 @@ import (
 	"github.com/goclient-vanmango/apiclient"
 	"github.com/goclient-vanmango/routes"
 	"github.com/goclient-vanmango/service"
+	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 )
 
@@ -44,7 +45,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	http.Handle("/assets/", http.StripPrefix("/assets/", fsAssets))
 
 	// Handle routes
-	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+	router := mux.NewRouter()
+
+	router.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Header().Add("Accept-Content", "application/json")
 		json.NewEncoder(w).Encode(struct {
@@ -56,16 +59,16 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		})
 		log.Println("Client server is functioning")
 	})
-	http.HandleFunc("/", apiHandler.PageHomeHandler)
-	http.HandleFunc("/sign-in", apiHandler.PageSignInHandler)
-	http.HandleFunc("/logout", apiHandler.LogoutHandler)
-	http.HandleFunc("/authorize", apiHandler.AuthorizeUserHandler)
-	http.HandleFunc("/van-details", apiHandler.PageVanDetailsHandler)
-	http.HandleFunc("/create-van", apiHandler.PageCreateVanHandler)
-	http.HandleFunc("/create-new-van", apiHandler.CreateNewVanHandler)
-	http.HandleFunc("/van-details/update-van", apiHandler.PageUpdateVanHandler)
-	http.HandleFunc("/update-van/{vanID}", apiHandler.UpdateVanHandler)
-	http.HandleFunc("/van-details/delete-van", apiHandler.DeleteVanHandler)
+	router.HandleFunc("/", apiHandler.PageHomeHandler).Methods(http.MethodGet)
+	router.HandleFunc("/sign-in", apiHandler.PageSignInHandler).Methods(http.MethodGet)
+	router.HandleFunc("/logout", apiHandler.LogoutHandler).Methods(http.MethodGet)
+	router.HandleFunc("/authorize", apiHandler.AuthorizeUserHandler).Methods(http.MethodGet)
+	router.HandleFunc("/van-details", apiHandler.PageVanDetailsHandler).Methods(http.MethodGet)
+	router.HandleFunc("/create-van", apiHandler.PageCreateVanHandler).Methods(http.MethodGet)
+	router.HandleFunc("/create-new-van", apiHandler.CreateNewVanHandler).Methods(http.MethodGet)
+	router.HandleFunc("/van-details/update-van", apiHandler.PageUpdateVanHandler).Methods(http.MethodGet)
+	router.HandleFunc("/update-van/{vanID}", apiHandler.UpdateVanHandler).Methods(http.MethodGet)
+	router.HandleFunc("/van-details/delete-van", apiHandler.DeleteVanHandler).Methods(http.MethodGet)
 
 	_ = godotenv.Load()
 
@@ -73,7 +76,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	// Start server
 	fmt.Println("Client server is listening on PORT ", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	router.ServeHTTP(w, r)
 
 }
 
@@ -92,7 +95,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 // 	http.Handle("/assets/", http.StripPrefix("/assets/", fsAssets))
 
 // 	// Handle routes
-// 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+// 	router := mux.NewRouter()
+
+// 	router.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 // 		w.WriteHeader(http.StatusOK)
 // 		w.Header().Add("Accept-Content", "application/json")
 // 		json.NewEncoder(w).Encode(struct {
@@ -104,16 +109,16 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 // 		})
 // 		log.Println("Client server is functioning")
 // 	})
-// 	http.HandleFunc("/", apiHandler.PageHomeHandler)
-// 	http.HandleFunc("/sign-in", apiHandler.PageSignInHandler)
-// 	http.HandleFunc("/logout", apiHandler.LogoutHandler)
-// 	http.HandleFunc("/authorize", apiHandler.AuthorizeUserHandler)
-// 	http.HandleFunc("/van-details", apiHandler.PageVanDetailsHandler)
-// 	http.HandleFunc("/create-van", apiHandler.PageCreateVanHandler)
-// 	http.HandleFunc("/create-new-van", apiHandler.CreateNewVanHandler)
-// 	http.HandleFunc("/van-details/update-van", apiHandler.PageUpdateVanHandler)
-// 	http.HandleFunc("/update-van/{vanID}", apiHandler.UpdateVanHandler)
-// 	http.HandleFunc("/van-details/delete-van", apiHandler.DeleteVanHandler)
+// 	router.HandleFunc("/", apiHandler.PageHomeHandler).Methods(http.MethodGet)
+// 	router.HandleFunc("/sign-in", apiHandler.PageSignInHandler).Methods(http.MethodGet)
+// 	router.HandleFunc("/logout", apiHandler.LogoutHandler).Methods(http.MethodGet)
+// 	router.HandleFunc("/authorize", apiHandler.AuthorizeUserHandler).Methods(http.MethodGet)
+// 	router.HandleFunc("/van-details", apiHandler.PageVanDetailsHandler).Methods(http.MethodGet)
+// 	router.HandleFunc("/create-van", apiHandler.PageCreateVanHandler).Methods(http.MethodGet)
+// 	router.HandleFunc("/create-new-van", apiHandler.CreateNewVanHandler).Methods(http.MethodGet)
+// 	router.HandleFunc("/van-details/update-van", apiHandler.PageUpdateVanHandler).Methods(http.MethodGet)
+// 	router.HandleFunc("/update-van/{vanID}", apiHandler.UpdateVanHandler).Methods(http.MethodGet)
+// 	router.HandleFunc("/van-details/delete-van", apiHandler.DeleteVanHandler).Methods(http.MethodGet)
 
 // 	_ = godotenv.Load()
 
@@ -121,5 +126,5 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 // 	// Start server
 // 	fmt.Println("Client server is listening on PORT ", port)
-// 	log.Fatal(http.ListenAndServe(":"+port, nil))
+// 	log.Fatal(http.ListenAndServe(":"+port, router))
 // }
