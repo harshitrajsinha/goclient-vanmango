@@ -36,16 +36,19 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	apiService := service.NewAPIService(apiclient)
 	apiHandler := routes.NewAPIHandler(apiService)
 
-	// Serve static files
-	fs := http.FileServer(http.Dir("./static"))
-	http.Handle("/static/", http.StripPrefix("/static/", fs))
+	router := mux.NewRouter()
+	router.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+	router.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets"))))
 
-	// Serve asset files
-	fsAssets := http.FileServer(http.Dir("./assets"))
-	http.Handle("/assets/", http.StripPrefix("/assets/", fsAssets))
+	// Serve static files
+	// fs := http.FileServer(http.Dir("./static"))
+	// http.Handle("/static/", http.StripPrefix("/static/", fs))
+
+	// // Serve asset files
+	// fsAssets := http.FileServer(http.Dir("./assets"))
+	// http.Handle("/assets/", http.StripPrefix("/assets/", fsAssets))
 
 	// Handle routes
-	router := mux.NewRouter()
 
 	router.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
