@@ -74,7 +74,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	router.HandleFunc("/create-new-van", apiHandler.CreateNewVanHandler).Methods(http.MethodPost)
 	router.HandleFunc("/van-details/update-van", apiHandler.PageUpdateVanHandler).Methods(http.MethodGet)
 	router.HandleFunc("/update-van/{vanID}", apiHandler.UpdateVanHandler).Methods(http.MethodPost)
-	router.HandleFunc("/van-details/delete-van", apiHandler.DeleteVanHandler).Methods(http.MethodPost)
+	router.HandleFunc("/van-details/delete-van", apiHandler.DeleteVanHandler).Methods(http.MethodGet)
 
 	_ = godotenv.Load()
 
