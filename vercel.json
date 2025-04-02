@@ -13,6 +13,18 @@
     {
       "src": "/(.*)",
       "dest": "handler.go"
+    },
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/css/$1"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
+      "src": "/templates/(.*)",
+      "dest": "/templates/$1"
     }
   ]
 }
