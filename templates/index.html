@@ -18,6 +18,13 @@
       <nav>
         <div class="nav__about-tag">About</div>
         <div class="nav__vans-tag">Vans</div>
+        <div class="nav__login">
+          {{if .LoggedIn}}
+          <a href="/logout">Logout</a>
+          {{else}}
+          <a href="/sign-in">Login</a>
+          {{end}}
+        </div>
       </nav>
     </header>
     <section class="vans-list">

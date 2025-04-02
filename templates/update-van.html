@@ -18,53 +18,62 @@
       <nav>
         <div class="nav__about-tag">About</div>
         <div class="nav__vans-tag">Vans</div>
+        <div class="nav__login">
+          {{if .LoggedIn}}
+          <a href="/logout">Logout</a>
+          {{else}}
+          <a href="/sign-in">Login</a>
+          {{end}}
+        </div>
       </nav>
     </header>
     <section>
-      <div class="create-van-heading">Update {{.Name}}</div>
-      <form action="/update-van/{{.VanCode}}" class="create-van-form" method="post">
+      <div class="create-van-heading">Update {{.VanData.Name}}</div>
+      <form action="/update-van/{{.VanData.VanCode}}" class="create-van-form" method="post">
         <div class="form-container">
           <div class="form-field-container">
             <label>Van Name<br />
-              <input required type="text" name="name" placeholder="New Van" value="{{.Name}}" minlength="3"
+              <input required type="text" name="name" placeholder="New Van" value="{{.VanData.Name}}" minlength="3"
                 maxlength="20" />
             </label>
             <label>Van Brand<br />
-              <input required type="text" name="brand" placeholder="Mercedes" value="{{.Brand}}" minlength="3"
+              <input required type="text" name="brand" placeholder="Mercedes" value="{{.VanData.Brand}}" minlength="3"
                 maxlength="20" />
             </label>
           </div>
           <div class="form-field-container">
             <label>Van Description
-              <textarea required name="description" rows="3" cols="50" maxlength="300">{{.Description}}</textarea>
+              <textarea required name="description" rows="3" cols="50"
+                maxlength="300">{{.VanData.Description}}</textarea>
             </label>
           </div>
 
           <p>Van Category</p>
           <div class="form-field-container">
-            <label>Simple<input type="radio" name="category" value="simple" {{if eq .Category "simple" }}checked{{end}}
-                required /></label>
-            <label>Rugged<input type="radio" name="category" value="rugged" {{if eq .Category "rugged"
+            <label>Simple<input type="radio" name="category" value="simple" {{if eq .VanData.Category "simple"
+                }}checked{{end}} required /></label>
+            <label>Rugged<input type="radio" name="category" value="rugged" {{if eq .VanData.Category "rugged"
                 }}checked{{end}} /></label>
-            <label>Luxury<input type="radio" name="category" value="luxury" {{if eq .Category "luxury"
+            <label>Luxury<input type="radio" name="category" value="luxury" {{if eq .VanData.Category "luxury"
                 }}checked{{end}} /></label>
           </div>
           <p>Fuel Type</p>
           <div class="form-field-container">
-            <label>Gasoline<input type="radio" name="fuel-type" value="gasoline" {{if eq .FuelType "gasoline"
+            <label>Gasoline<input type="radio" name="fuel-type" value="gasoline" {{if eq .VanData.FuelType "gasoline"
                 }}checked{{end}} required /></label>
-            <label>Petrol<input type="radio" name="fuel-type" value="petrol" {{if eq .FuelType "petrol"
+            <label>Petrol<input type="radio" name="fuel-type" value="petrol" {{if eq .VanData.FuelType "petrol"
                 }}checked{{end}} /></label>
-            <label>Diesel<input type="radio" name="fuel-type" value="diesel" {{if eq .FuelType "diesel"
+            <label>Diesel<input type="radio" name="fuel-type" value="diesel" {{if eq .VanData.FuelType "diesel"
                 }}checked{{end}} /></label>
           </div>
           <div class="form-field-container">
             <label>Van Price
-              <input required type="number" placeholder="2000" name="price" min="1000" max="9999" value="{{.Price}}" />
+              <input required type="number" placeholder="2000" name="price" min="1000" max="9999"
+                value="{{.VanData.Price}}" />
             </label>
             <label>Van Image
               <input required type="text" name="image-url" minlength="15" maxlength="150"
-                placeholder="https://hosted-image-url.png" value="{{.ImageURL}}" />
+                placeholder="https://hosted-image-url.png" value="{{.VanData.ImageURL}}" />
             </label>
           </div>
         </div>

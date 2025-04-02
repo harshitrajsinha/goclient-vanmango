@@ -61,6 +61,11 @@ nav {
   cursor: pointer;
 }
 
+.nav__login a {
+  color: black;
+  text-decoration: underline;
+}
+
 .back-arrow {
   margin-top: 2rem;
 }

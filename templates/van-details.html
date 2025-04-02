@@ -18,6 +18,13 @@
       <nav>
         <div class="nav__about-tag">About</div>
         <div class="nav__vans-tag">Vans</div>
+        <div class="nav__login">
+          {{if .LoggedIn}}
+          <a href="/logout">Logout</a>
+          {{else}}
+          <a href="/sign-in">Login</a>
+          {{end}}
+        </div>
       </nav>
     </header>
     <div class="back-arrow">
@@ -25,18 +32,18 @@
     </div>
 
     <section class="van-details">
-      <img class="van-details__van-image" src="{{.ImageURL}}" alt="{{.Name}}" />
-      <div class="van-details__van-type {{.Category}}">{{.Category}}</div>
-      <div class="van-details__van-name">{{.Name}}</div>
+      <img class="van-details__van-image" src="{{.VanDetails.ImageURL}}" alt="{{.VanDetails.Name}}" />
+      <div class="van-details__van-type {{.VanDetails.Category}}">{{.VanDetails.Category}}</div>
+      <div class="van-details__van-name">{{.VanDetails.Name}}</div>
       <div class="van-details__van-price">
-        &#x20B9;{{.Price}}<span class="day">/day</span>
+        &#x20B9;{{.VanDetails.Price}}<span class="day">/day</span>
       </div>
-      <div class="van-details__van-desc">{{.Description}}</div>
+      <div class="van-details__van-desc">{{.VanDetails.Description}}</div>
       <div class="van-details__van-operation">
-        <a href="/van-details/update-van?van={{.VanCode}}">
+        <a href="/van-details/update-van?van={{.VanDetails.VanCode}}">
           <button type="submit">Update Van</button>
         </a>
-        <a href="/van-details/delete-van?van={{.VanCode}}">
+        <a href="/van-details/delete-van?van={{.VanDetails.VanCode}}">
           <button type="submit">Delete Van</button>
         </a>
       </div>

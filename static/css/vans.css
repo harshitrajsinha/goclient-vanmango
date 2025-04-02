@@ -61,6 +61,11 @@ nav {
   cursor: pointer;
 }
 
+.nav__login a {
+  color: black;
+  text-decoration: underline;
+}
+
 section {
   flex-grow: 1;
   margin-top: 3rem;

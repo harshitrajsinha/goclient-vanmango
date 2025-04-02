@@ -3,7 +3,6 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -26,7 +25,7 @@ type vanInfo []struct {
 	ImageURL string
 }
 
-type vanDetails struct {
+type VanDetails struct {
 	VanCode     string
 	Name        string
 	Brand       string
@@ -65,6 +64,71 @@ func validateLoginForm(data *authData) string {
 	}
 
 	return ""
+}
+
+func (s *Service) AuthorizeUser(w http.ResponseWriter, r *http.Request) (int, error) {
+
+	var token interface{}
+
+	// Parse form data
+	err := r.ParseForm()
+	if err != nil {
+		return -1, err
+	}
+
+	// Get form values
+	formData := authData{
+		Username: r.FormValue("username"),
+		Password: r.FormValue("password"),
+	}
+
+	// Get token id
+
+	// Validate data
+	isValid := validateLoginForm(&formData)
+
+	if isValid != "" {
+		return -1, fmt.Errorf("%s", isValid)
+	}
+
+	_ = godotenv.Load()
+
+	baseURL := os.Getenv("BASE_URL")
+	requestUrl := baseURL + "/login"
+
+	requestToSend, err := json.Marshal(formData)
+	if err != nil {
+		return -1, err
+	}
+
+	response, err, statusCode := s.apiClient.Post(requestUrl, &requestToSend, "")
+	if err != nil {
+		return -1, err
+	}
+
+	if statusCode == 201 && (*response)["code"] == float64(201) {
+		data := (*response)["data"].([]interface{})[0].(map[string]interface{})
+		token = data["token"]
+	} else {
+		return -1, fmt.Errorf("%s", (*response)["message"])
+	}
+
+	// Create a new cookie
+	cookie := &http.Cookie{
+		Name:     "session_token",
+		Value:    token.(string),
+		Path:     "/",
+		MaxAge:   1800, // 30mins in seconds
+		HttpOnly: true,
+		Secure:   true, // Only send over HTTPS
+		SameSite: http.SameSiteLaxMode,
+	}
+
+	// Set the cookie
+	http.SetCookie(w, cookie)
+
+	return 1, nil
+
 }
 
 func (s *Service) GetAllVans(w http.ResponseWriter, r *http.Request) (*vanInfo, error) {
@@ -113,12 +177,63 @@ func (s *Service) GetAllVans(w http.ResponseWriter, r *http.Request) (*vanInfo, 
 
 }
 
-func (s *Service) GetVanByID(w http.ResponseWriter, r *http.Request, vanID string) (*vanDetails, error) {
+func (s *Service) CreateVan(w http.ResponseWriter, r *http.Request, cookieVal string) (int64, error) {
+
+	// Parse form data
+
+	var err error
+	// Parse form data
+	err = r.ParseForm()
+	if err != nil {
+		http.Error(w, "Error parsing form", http.StatusBadRequest)
+		return -1, nil
+	}
+
+	// Get form values
+	formData := VanDetails{
+		Name:        r.FormValue("name"),
+		Brand:       r.FormValue("brand"),
+		Description: r.FormValue("description"),
+		Category:    r.FormValue("category"),
+		FuelType:    r.FormValue("fuel-type"),
+		Price:       r.FormValue("price"),
+		ImageURL:    r.FormValue("image-url"),
+	}
+
+	// form validation
+
+	// 	// convert price -> string to int
+	priceStrToInt, _ := strconv.Atoi(formData.Price)
+	var formInput map[string]interface{} = map[string]interface{}{"name": formData.Name, "brand": formData.Brand, "description": formData.Description, "category": formData.Category, "engine-id": "e1f86b1a-0873-4c19-bae2-fc60329d0140", "fuel-type": formData.FuelType, "price": priceStrToInt, "image-url": formData.ImageURL}
+
+	requestToSend, err := json.Marshal(formInput)
+	if err != nil {
+		return -1, err
+	}
+
+	_ = godotenv.Load()
+
+	baseURL := os.Getenv("BASE_URL")
+	requestUrl := baseURL + "/van"
+
+	response, err, statusCode := s.apiClient.Post(requestUrl, &requestToSend, cookieVal)
+	if err != nil {
+		return -1, err
+	} else {
+		if statusCode == 201 && (*response)["code"] == float64(201) {
+			return 1, nil
+		} else {
+			return -1, fmt.Errorf("%s", (*response)["message"])
+		}
+	}
+}
+
+func (s *Service) GetVanByID(w http.ResponseWriter, r *http.Request, vanID string) (*VanDetails, error) {
 
 	var err error
 	var data *map[string]interface{}
 
-	var vanDetailInfo vanDetails
+	var vanDetailInfo VanDetails
 
 	_ = godotenv.Load()
 
@@ -185,7 +300,7 @@ func (s *Service) GetVanByID(w http.ResponseWriter, r *http.Request, vanID strin
 
 }
 
-func (s *Service) UpdateVan(w http.ResponseWriter, r *http.Request, vanID string) (int64, error) {
+func (s *Service) UpdateVan(w http.ResponseWriter, r *http.Request, vanID string, cookieVal string) (int64, error) {
 
 	// Parse form data
 
@@ -197,7 +312,7 @@ func (s *Service) UpdateVan(w http.ResponseWriter, r *http.Request, vanID string
 	}
 
 	// Get form values
-	formData := vanDetails{
+	formData := VanDetails{
 		Name:        r.FormValue("name"),
 		Brand:       r.FormValue("brand"),
 		Description: r.FormValue("description"),
@@ -223,7 +338,7 @@ func (s *Service) UpdateVan(w http.ResponseWriter, r *http.Request, vanID string
 	baseURL := os.Getenv("BASE_URL")
 	requestUrl := baseURL + "/van/" + vanID
 
-	_, err = s.apiClient.Put(requestUrl, &requestToSend)
+	_, err = s.apiClient.Put(requestUrl, &requestToSend, cookieVal)
 	if err != nil {
 		return -1, err
 	} else {
@@ -231,7 +346,7 @@ func (s *Service) UpdateVan(w http.ResponseWriter, r *http.Request, vanID string
 	}
 }
 
-func (s *Service) DeleteVan(w http.ResponseWriter, r *http.Request, vanID string) (int64, error) {
+func (s *Service) DeleteVan(w http.ResponseWriter, r *http.Request, vanID string, cookieVal string) (int, error) {
 
 	var err error
 
@@ -240,77 +355,10 @@ func (s *Service) DeleteVan(w http.ResponseWriter, r *http.Request, vanID string
 	baseURL := os.Getenv("BASE_URL")
 	requestUrl := baseURL + "/van/" + vanID
 
-	data, err := s.apiClient.Delete(requestUrl)
+	statusCode, err := s.apiClient.Delete(requestUrl, cookieVal)
 	if err != nil {
-		log.Println(data)
-		return -1, err
+		return http.StatusInternalServerError, err
 	} else {
-		log.Println(data)
-		return 1, nil
+		return statusCode, nil
 	}
-}
-
-func (s *Service) AuthorizeUser(w http.ResponseWriter, r *http.Request) (int, error) {
-
-	var token interface{}
-
-	// Parse form data
-	err := r.ParseForm()
-	if err != nil {
-		return -1, err
-	}
-
-	// Get form values
-	formData := authData{
-		Username: r.FormValue("username"),
-		Password: r.FormValue("password"),
-	}
-
-	// Get token id
-
-	// Validate data
-	isValid := validateLoginForm(&formData)
-
-	if isValid != "" {
-		return -1, fmt.Errorf("%s", isValid)
-	}
-
-	_ = godotenv.Load()
-
-	baseURL := os.Getenv("BASE_URL")
-	requestUrl := baseURL + "/login"
-
-	requestToSend, err := json.Marshal(formData)
-	if err != nil {
-		return -1, err
-	}
-
-	response, err := s.apiClient.Post(requestUrl, &requestToSend)
-	if err != nil {
-		return -1, err
-	}
-
-	if (*response)["code"] == float64(201) {
-		data := (*response)["data"].([]interface{})[0].(map[string]interface{})
-		token = data["token"]
-	} else {
-		return -1, fmt.Errorf("%s", "No Auth token received")
-	}
-
-	// Create a new cookie
-	cookie := &http.Cookie{
-		Name:     "session_token",
-		Value:    token.(string),
-		Path:     "/",
-		MaxAge:   1800, // 30mins in seconds
-		HttpOnly: true,
-		Secure:   true, // Only send over HTTPS
-		SameSite: http.SameSiteLaxMode,
-	}
-
-	// Set the cookie
-	http.SetCookie(w, cookie)
-
-	return 1, nil
-
 }
