@@ -1,5 +1,5 @@
 // handler.go
-package handler
+package routes
 
 import (
 	"log"
