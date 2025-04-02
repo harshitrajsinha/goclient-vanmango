@@ -39,6 +39,10 @@ func main() {
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
+	// Serve asset files
+	fsAssets := http.FileServer(http.Dir("./assets"))
+	http.Handle("/assets/", http.StripPrefix("/assets/", fsAssets))
+
 	// Handle routes
 	http.HandleFunc("/", apiHandler.PageHomeHandler)
 	http.HandleFunc("/sign-in", apiHandler.PageSignInHandler)

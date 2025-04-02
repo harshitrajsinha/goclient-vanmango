@@ -47,7 +47,8 @@ header {
 nav {
   display: flex;
   flex-direction: row;
-  gap: 2rem;
+  align-items: center;
+  gap: 1.5rem;
   color: #4d4d4d;
   font-size: 1.3rem;
   font-family: Inter, var(--default-font-family);
@@ -55,8 +56,18 @@ nav {
   line-height: 22.923px;
   white-space: nowrap;
 }
-.nav__about-tag:hover,
-.nav__vans-tag:hover {
+
+.nav__github-tag img {
+  height: 2rem;
+  width: 2rem;
+}
+
+.nav__vans-tag {
+  color: black;
+}
+
+.nav__vans-tag:hover,
+.nav__login a:hover {
   color: black;
   text-decoration: underline;
   cursor: pointer;
@@ -64,7 +75,6 @@ nav {
 
 .nav__login a {
   color: black;
-  text-decoration: underline;
 }
 
 section {

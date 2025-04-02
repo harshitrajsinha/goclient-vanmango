@@ -49,8 +49,9 @@ func (h *apiHandler) PageSignInHandler(w http.ResponseWriter, r *http.Request) {
 	var UserLoggedIn bool
 
 	if r.URL.Path != "/sign-in" {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		log.Println("PageSignInHandler::Incorrect error path")
+		tmpl, _ := template.ParseFiles("templates/page-not-found.html")
+		_ = tmpl.Execute(w, nil)
+		log.Println("PageHomeHandler::Incorrect error path ", r.URL.Path)
 		return
 	}
 
@@ -101,8 +102,9 @@ func (h *apiHandler) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	}()
 
 	if r.URL.Path != "/logout" {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		log.Println("LogoutHandler::Incorrect error path")
+		tmpl, _ := template.ParseFiles("templates/page-not-found.html")
+		_ = tmpl.Execute(w, nil)
+		log.Println("PageHomeHandler::Incorrect error path ", r.URL.Path)
 		return
 	}
 
@@ -168,8 +170,9 @@ func (h *apiHandler) PageHomeHandler(w http.ResponseWriter, r *http.Request) {
 	var UserLoggedIn bool
 
 	if r.URL.Path != "/" && r.URL.Path != "/favicon.ico" {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		log.Println("PageHomeHandler::Incorrect error path")
+		tmpl, _ := template.ParseFiles("templates/page-not-found.html")
+		_ = tmpl.Execute(w, nil)
+		log.Println("PageHomeHandler::Incorrect error path ", r.URL.Path)
 		return
 	}
 
@@ -229,7 +232,9 @@ func (h *apiHandler) PageVanDetailsHandler(w http.ResponseWriter, r *http.Reques
 	var UserLoggedIn bool
 
 	if r.URL.Path != "/van-details" {
-		http.NotFound(w, r)
+		tmpl, _ := template.ParseFiles("templates/page-not-found.html")
+		_ = tmpl.Execute(w, nil)
+		log.Println("PageHomeHandler::Incorrect error path ", r.URL.Path)
 		return
 	}
 
@@ -285,7 +290,9 @@ func (h *apiHandler) PageUpdateVanHandler(w http.ResponseWriter, r *http.Request
 
 	// 	var err error
 	if r.URL.Path != "/van-details/update-van" {
-		http.NotFound(w, r)
+		tmpl, _ := template.ParseFiles("templates/page-not-found.html")
+		_ = tmpl.Execute(w, nil)
+		log.Println("PageHomeHandler::Incorrect error path ", r.URL.Path)
 		return
 	}
 
@@ -405,8 +412,9 @@ func (h *apiHandler) PageCreateVanHandler(w http.ResponseWriter, r *http.Request
 	var UserLoggedIn bool
 
 	if r.URL.Path != "/create-van" {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		log.Println("PageCreateVanHandler::Incorrect error path")
+		tmpl, _ := template.ParseFiles("templates/page-not-found.html")
+		_ = tmpl.Execute(w, nil)
+		log.Println("PageHomeHandler::Incorrect error path ", r.URL.Path)
 		return
 	}
 
