@@ -10,12 +10,12 @@ import (
 )
 
 type APIClient struct {
-	Client *http.Client
+	client *http.Client
 }
 
 func NewAPIClient() *APIClient {
 	return &APIClient{
-		Client: &http.Client{
+		client: &http.Client{
 			Timeout: 10 * time.Second,
 			Transport: &http.Transport{
 				MaxIdleConns:        100,
@@ -35,7 +35,7 @@ func (api *APIClient) Get(url string) (*map[string]interface{}, error) {
 		return nil, err
 	}
 	request.Header.Set("Accept", "application/json")
-	response, err := api.Client.Do(request)
+	response, err := api.client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (api *APIClient) Post(url string, request *[]byte, cookieVal string) (*map[
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+cookieVal)
-	response, err := api.Client.Do(req)
+	response, err := api.client.Do(req)
 	if err != nil {
 		return nil, err, 500
 	}
@@ -101,7 +101,7 @@ func (api *APIClient) Put(url string, request *[]byte, cookieVal string) (*map[s
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+cookieVal)
-	response, err := api.Client.Do(req)
+	response, err := api.client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +134,7 @@ func (api *APIClient) Delete(url string, cookieVal string) (int, error) {
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+cookieVal)
-	response, err := api.Client.Do(req)
+	response, err := api.client.Do(req)
 	if err != nil {
 		return http.StatusInternalServerError, err
 	}
