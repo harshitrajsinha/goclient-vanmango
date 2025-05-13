@@ -2,7 +2,7 @@
 
 🚀 A **Van Management System** built using **Golang** with **PostgreSQL**, enabling advanced CRUD operations following standard REST API practices.
 
-![Vanmango](./assets/vanmango-landscape.png)
+![Vanmango](./assets/image-one.png)
 
 ## [Visit Site](https://vanmango.vercel.app/)
 
